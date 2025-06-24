@@ -19,7 +19,7 @@ RecruitFlow-Agents is the AI core behind the interview experience. It consists o
 
 ```mermaid
 graph TD
-    A[Frontend UI (Next.js)] -->|LiveKit Token + Room| B[LiveKit Cloud]
+    A[Frontend UI (Nextjs)] -->|LiveKit Token + Room| B[LiveKit Cloud]
     B --> C[Candidate (via WebRTC)]
     B --> D[RecruitFlow-Agent (AI Interviewer)]
     D --> E[Google Gemini 2.0 Flash]
