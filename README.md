@@ -18,16 +18,30 @@ RecruitFlow-Agents is the AI core behind the interview experience. It consists o
 ## 🧩 System Architecture
 
 ```mermaid
-graph TD
-    A[Frontend UI (Nextjs)] -->|LiveKit Token + Room| B[LiveKit Cloud]
-    B --> C[Candidate (via WebRTC)]
-    B --> D[RecruitFlow-Agent (AI Interviewer)]
-    D --> E[Google Gemini 2.0 Flash]
-    D --> F[OpenAI GPT-4o (Streaming)]
-    D --> G[LangChain Tools]
-    D --> H[PDF Report Generator]
+flowchart TD
+    %% Backend Agents
+    JD[1️⃣ JD Parser and Flow Generator]
+    IA[2️⃣ Interview Agent - GPT-4o Realtime]
+    RA[3️⃣ Report Agent - Transcript and PDF Generator]
+
+    %% LiveKit in the middle
+    LK[📡 LiveKit Room - WebRTC]
+
+    %% Frontend at bottom
+    A1[🧑‍💻 Candidate UI - Next.js]
+
+    %% Data & Control Flow
+    JD -->|Interview Plan| IA
+    IA -->|Transcript and Logs| RA
+    RA -->|PDF Report| A1
+
+    %% WebRTC Connections
+    IA -->|WebRTC| LK
+    A1 -->|WebRTC| LK
 ```
-##🧑‍💻 Technologies Used
+
+## 🧑‍💻 Technologies Used
+
 Python 3.10+
 
 LangChain
@@ -44,8 +58,8 @@ React
 
 NextJs
 
-
-##🧠 Agents Overview
+---
+## 🧠 Agents Overview
 **ResumeParserAgent**: Extracts candidate details and email from uploaded resumes.(PyPDF)
 
 **JDInterpreterAgent**: Reads job description to understand context.Crafts dynamic questions based on role, JD, and resume.(Gemini-2.0-Flash)
@@ -57,7 +71,9 @@ NextJs
 **Result and Report**: Makes a detailed PDF Report of The Responces.
 ![PDFreport](report.png)
 
-##🔗 WebRTC Connection Flow (LiveKit Cloud)
+---
+
+## 🔗 WebRTC Connection Flow (LiveKit Cloud)
 Frontend initializes a new interview session via LiveKit API.
 
 It shares room credentials (Room name, Token) with the backend via API or WebSocket.
@@ -66,12 +82,13 @@ The backend joins the same LiveKit room as a "virtual interviewer".
 
 Backend listens to candidate's audio, streams responses via GPT-4o, and sends back audio in real-time.
 
+---
+# Connecting To the Client
 
-#Connecting To the Client
-
-**The Client side Frontend connects to this agent via WebRTC connection i.e. with LiveKit Cloud**
-For the Frontend Client Please Visit my Repo: [frontend](https://github.com/Muco0l/RecuritFlow_interview_Client.git)
-
-#The Final Product You get is:
+*The Client side Frontend connects to this agent via WebRTC connection i.e. with LiveKit Cloud*
+For the Frontend Client Please Visit my Repo:
+[frontend](https://github.com/Muco0l/RecuritFlow_interview_Client.git)
+---
+## The Final Product You get is:
 ![final](final.png)
 **i.e. a perfect tool to practice and tackel any interview**
