@@ -1,49 +1,77 @@
-# 🎤 RecruitFlow – AI-Powered Real-Time Interview Simulator
+# RecruitFlow-Agents
 
-RecruitFlow is an intelligent, real-time interview simulation platform built using advanced LLMs and WebRTC technologies. It mimics a live interviewer by generating dynamic, job-specific questions based on candidate resumes and job descriptions.
-
-![banner](interview_demo.png)
+This repository contains the backend AI agents for **RecruitFlow-Interviews** — a live, intelligent interview simulation platform designed to replicate realistic interview experiences using real-time WebRTC and LLM-driven agents.
 
 ---
 
-## 🔍 Key Features
+## 🧠 Overview
 
-- 🤖 **AI Interviewer Agent**: Uses GPT-4o and Gemini 2.0 to ask personalized, role-based questions.
-- 🎥 **Live Audio/Video Interaction**: Built using LiveKit + WebRTC for seamless real-time communication.
-- 📄 **Context-Aware Question Flow**: Tailors follow-ups based on user answers and resume data.
-- 📝 **Response Logging**: Logs Q&A in structured format (JSON) for post-interview review.
-- 🕒 **Dynamic Duration Control**: Interview ends after 10 minutes or a set number of questions.
-- 🧠 **LLM-Driven Evaluation** *(WIP)*: Potential to score responses or give feedback.
+RecruitFlow-Agents is the AI core behind the interview experience. It consists of multiple intelligent agents built using LangChain and LLM APIs (Gemini 2.0 Flash + GPT-4o), which simulate:
 
----
-
-## ⚙️ Tech Stack
-
-| Layer         | Tech                                 |
-|---------------|--------------------------------------|
-| AI/LLMs       | GPT-4o, Gemini 2.0 Flash             |
-| Frameworks    | LangChain, Python                    |
-| Real-Time     | LiveKit, WebRTC                      |
-| Backend       | Supabase (auth & room logic), Flask  |
-| Logging       | JSON, File-based logging             |
-| Infra         | Livekit Clouse    |
+- Resume parsing
+- Job description understanding
+- Dynamic question generation
+- Live audio conversation with the candidate
 
 ---
 
-## 🚀 How It Works
+## 🧩 System Architecture
 
-1. User enters a job title and optionally uploads a resume.
-2. The AI interviewer (LLM agent) generates role-based questions.
-3. Real-time communication happens via LiveKit and WebRTC.
-4. Each question and user response is logged in real-time.
-5. Interview auto-ends after 10 minutes or N questions.
+```mermaid
+graph TD
+    A[Frontend UI (Next.js)] -->|LiveKit Token + Room| B[LiveKit Cloud]
+    B --> C[Candidate (via WebRTC)]
+    B --> D[RecruitFlow-Agent (AI Interviewer)]
+    D --> E[Google Gemini 2.0 Flash]
+    D --> F[OpenAI GPT-4o (Streaming)]
+    D --> G[LangChain Tools]
+    D --> H[PDF Report Generator]
+```
+##🧑‍💻 Technologies Used
+Python 3.10+
 
----
+LangChain
 
-## 📸 Demo Screenshots
+Google Gemini 2.0 Flash API
 
-*(Insert screenshots or video demo links here)*
+OpenAI GPT-4o (streaming)
 
----
+LiveKit Python SDK
+
+Reportlab(Python) (for structured interview report generation)
+
+React
+
+NextJs
 
 
+##🧠 Agents Overview
+**ResumeParserAgent**: Extracts candidate details and email from uploaded resumes.(PyPDF)
+
+**JDInterpreterAgent**: Reads job description to understand context.Crafts dynamic questions based on role, JD, and resume.(Gemini-2.0-Flash)
+![interpretation](interpret.png)
+
+**InterviewConductorAgent**: Connects via LiveKit and handles real-time interactions using GPT-4o.
+![Console Interview](interview_console.png)
+
+**Result and Report**: Makes a detailed PDF Report of The Responces.
+![PDFreport](report.png)
+
+##🔗 WebRTC Connection Flow (LiveKit Cloud)
+Frontend initializes a new interview session via LiveKit API.
+
+It shares room credentials (Room name, Token) with the backend via API or WebSocket.
+
+The backend joins the same LiveKit room as a "virtual interviewer".
+
+Backend listens to candidate's audio, streams responses via GPT-4o, and sends back audio in real-time.
+
+
+#Connecting To the Client
+
+**The Client side Frontend connects to this agent via WebRTC connection i.e. with LiveKit Cloud**
+For the Frontend Client Please Visit my Repo: [frontend](https://github.com/Muco0l/RecuritFlow_interview_Client.git)
+
+#The Final Product You get is:
+![final](final.png)
+**i.e. a perfect tool to practice and tackel any interview**
